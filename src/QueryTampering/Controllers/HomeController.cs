@@ -10,10 +10,15 @@ namespace QueryTampering.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: /<controller>/
+        // GET: /<controller>/{id}
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Show(int id)
+        {
+            return View(id);
         }
     }
 }

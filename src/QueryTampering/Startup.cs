@@ -3,21 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Http;
 using Microsoft.Framework.DependencyInjection;
+using QueryTampering.Middleware;
+using Microsoft.Framework.ConfigurationModel;
+
 
 namespace QueryTampering
 {
     public class Startup
     {
-        // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
+        public IConfiguration Configuration { get; set; }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(_ => Configuration);
             services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            Configuration = new Configuration()
+                .AddJsonFile("config.json")
+                .AddEnvironmentVariables();
+
+            // Check for query string tampering
+            app.UseMiddleware<QSHashMiddleware>();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
