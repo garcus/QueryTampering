@@ -45,7 +45,7 @@ namespace QueryTampering.Middleware
 
             int hashPos = qs.IndexOf("&h=");
             qs = qs.Substring(0, hashPos);
-            if (submittedHash != Security.ComputeHash(qs, _hashKey))
+            if (submittedHash != Security.ComputeHash(qs))
                 throw new Exception("Querystring hash value mismatch");
         }
     }

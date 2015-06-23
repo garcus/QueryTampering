@@ -9,7 +9,13 @@ namespace QueryTampering.Utils
 {
     public static class Security
     {
-        public static string ComputeHash(string qs, string _hashKey)
+        private static string _hashKey = "C2CE6ACD";
+
+        public static string CreateTamperProofQueryString(string basicQueryString)
+        {
+            return string.Concat(basicQueryString, "&h=", ComputeHash(basicQueryString));
+        }
+        public static string ComputeHash(string qs)
         {
             byte[] textBytes = Encoding.UTF8.GetBytes(qs);
             HMACSHA1 hashAlgorithm = new HMACSHA1(Security.HexToByteArray(_hashKey));
